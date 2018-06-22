@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  testinterface:
+    image: ${DOCKER_REGISTRY}testinterface
+    build:
+      context: .
+      dockerfile: TestInterface\Dockerfile

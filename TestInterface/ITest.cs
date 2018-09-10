@@ -15,4 +15,9 @@ namespace CHJSZX.Worker
         /// <returns></returns>
         Task<int> ExecuteAsyn(int x,int y);
     }
+    public class DeviceFrame
+    {
+        public int FrameId { get; set; }
+        public string DeviceName { get; set; }
+    }
 }

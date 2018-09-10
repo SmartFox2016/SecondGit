@@ -10,6 +10,7 @@ namespace TestGenericList
         {
             //定义一个泛型类,适用不同参数下的调用方法  
             Console.WriteLine("ShowT print {0},ShowT Parament Type Is {1}", t, t.GetType());
+
         }
     }
     class Program

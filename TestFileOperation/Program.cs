@@ -8,6 +8,15 @@ namespace TestFileOperation
     {
         static void Main(string[] args)
         {
+            byte CFlag = 0;
+            if ((CFlag&0x0f)==0)
+            {
+                Console.WriteLine("I'm here!!");
+            }
+
+            string str4 = "D010";
+            var result = UtilTool.GetSendDataNew(str4);
+
             /*
              * description:递归地输出当前运行程序所在的磁盘下的所有文件名和子目录名，
              *      并将结果保存在指定的txt文件中

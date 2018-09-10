@@ -84,6 +84,7 @@ namespace TestOther2_Delegate
             Console.WriteLine(DateTime.Now);
             Action<int> onSuccess;
             onSuccess = new Action<int>(mthod);
+            onSuccess(4);
             onSuccess?.Invoke(3);
 
             //Action的进阶用法

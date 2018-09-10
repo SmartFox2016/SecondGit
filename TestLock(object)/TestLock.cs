@@ -14,8 +14,8 @@ namespace TestLock_object_
         //这个方法用到了lock，我们希望lock的代码在同一时刻只能由一个线程访问
         public void LockMe(object obj)
         {
-            //lock (locker)//锁定的是私有对象
-            lock (this)//锁定的是全局对象
+            lock (locker)//锁定的是私有对象,
+            //lock (this)//锁定的是全局对象C1
             {
                 while (deadlocked)
                 {
@@ -34,14 +34,19 @@ namespace TestLock_object_
 
     class TestLock
     {
+        private object locker2 = new object();//这是定义了一个object 锁对象，这是要和lock(this)做区别 
         static void Main(string[] args)
         {
+            DateTime dt= DateTime.UtcNow + TimeSpan.FromMinutes(10);
+            Console.WriteLine($"现在时间：{DateTime.Now},  {DateTime.UtcNow}");
             C1 c1 = new C1();
-            Thread t1 = new Thread(c1.LockMe);
+            TestLock tLock = new TestLock();
+           Thread t1 = new Thread(c1.LockMe);
             t1.Start(true);
             Thread.Sleep(1000);
             //在主线程中lock c1
             lock (c1)
+            //lock (tLock.locker2)
             {
                 //调用没有被lock的方法
                 c1.DoNotLockMe();

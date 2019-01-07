@@ -6,8 +6,4 @@
     <Configurations>Debug;Release;DOG</Configurations>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DotNetty.Common" Version="0.6.0" />
-  </ItemGroup>
-
 </Project>

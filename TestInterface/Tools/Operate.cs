@@ -41,6 +41,37 @@ namespace TestInterface.Tools
 
             return returnData;
         }
+        public void  GetFDatas(byte dt11,byte dt22)
+        {
+            short result;
+            var dt1 = dt11;
+            var dt2 = dt22;
+            byte x = dt1, y = 1;
+            while (x != 0)
+            {
+                if ((x & 0x01) != 0)
+                {
+                    //NOTE: 已经是从小到大的了
+                      result=(short)(dt2 * 8 + y);
+                }
+
+                x >>= 1;
+                ++y;
+            }
+            Console.WriteLine()
+        }
+
+        public class DataFault_Log
+        {
+            public int ID { get; set; }
+            public string Tag { get; set; }
+            public int? Level { get; set; }
+            public string Tag2 { get; set; }
+            public string Msg { get; set; }
+            public DateTime Time { get; set; }
+            public int? Srv_ID { get; set; }
+        }
+
         public class DeviceManager
         {
             public ConcurrentDictionary<int, int> id2Dev = new ConcurrentDictionary<int, int>();

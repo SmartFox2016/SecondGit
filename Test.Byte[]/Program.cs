@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Test.Byte1;
 using TestOther;
 
@@ -211,36 +212,80 @@ namespace Test.Byte1.Array
             int CycleM5 = 0;
             for (int i = 0; i < strLen; i++)
             {
-                result[i] = Convert.ToByte(strList.ElementAt(i), 16);
-                if (model.Equals("DTU_Upload"))
-                {
-                    //if (i <= strLen - 2)
-                    //{
-                    //    if (result[i + 1] < 5)
-                    //    {
-                    //       ++CycleM5;
-                    //    }
-                    //}
-                    if (i <= strLen - 2&& result[i + 1] < 5)
-                    {
-                        ++CycleM5;
-                    }
-                }
+                result[i] = Convert.ToByte(strList[i], 16);
+                //if ("DTU_Upload".Equals(model))
+                //{
+                //    if (i <= strLen&& i>=1 && result[i] < 5)
+                //    {
+                //        ++CycleM5;
+                //    }
+                //}
             }
-            if (CycleM5 >= 1)
-            {
-                throw new InvalidDataException("设置的上报周期不能小于5");
-            }
+            //if (CycleM5 >= 1)
+            //{
+            //    throw new InvalidDataException("设置的上报周期不能小于5");Marksis
+            //}
             return result;
         }
 
+        //2018-09-11 将“123.56.160.179”转为byte[]
+        public static byte[] IP2Byte(string str)
+        {
+            string[] parts = str.Split(new char[] { '.' });
+            int len = parts.Length;
+            byte[] result = new byte[parts.Length + 23];
+            int CycleM5 = 0;
+            string str2 = null;
+            for (int i = 0; i < len + 23; i++)
+            {
+                if (i <= 3)
+                {
+                    str2 = Convert.ToString(Int32.Parse(parts.ElementAt(i)), 16);
+                    result[i] = Convert.ToByte(str2, 16);
+                }
+                if(i==4||i==5)
+                {
+                    str2 = Convert.ToString(Int32.Parse(parts.ElementAt(4)), 16);
+                    result[i] = Str2Byte("", str2)[i - 4];
+                }
+            }
+            return result;
+        }
+        public static byte[] ConverResult(string model, string str)
+        {
+            if (model.Equals("CServer_IP"))
+            {
+                return IP2Byte(str);
+            }
+            else
+            {
+                return Str2Byte(model, str);
+            }
+            
+        }
+
+        string S2, S3;
 
         static void Main(string[] args)
         {
+            Program S1 = new Program();
+            S1.S2 = null;
+            String S3 ="Nihao";
+            var 测试0 =S1?.S2??S3;
+            Console.WriteLine($"{测试0:x4}H");
             //byte[] testByte = new byte[]{ 0xC9, 0x01 , 0x00 , 0x00 , 0x00 , 0x00 , 0x02 , 0xE0 , 0x00 , 0x00 , 0x04 , 0x00};
-
-            //var 测试 = Program.Str2Byte( "DTU_Upload", "0f02030405");
-            //Console.WriteLine($"测试结果={测试}");
+            var 测试 = Program.Str2Byte( "", "0d02020202");
+            Console.WriteLine($"测试结果={测试}");
+            var 测试1=Convert.ToInt32("29", 16);
+            var 测试2 = Convert.ToByte("39", 16);
+            var 测试3 = Convert.ToString(8080, 16);
+            Console.WriteLine($"{测试3:x4}H");
+            var tst= Program.ConverResult("CServer_IP", "123.56.160.179.8080");
+            var tst2 = Program.ConverResult("Switch_Model", "021956");
+            foreach (var item in tst)
+            {
+                Console.Write($"{item:x4}H ,");
+            }
             Program.Method3(4);
             int m =1, n=1;
             Console.WriteLine($"m={++m},n={n++}");
@@ -249,7 +294,11 @@ namespace Test.Byte1.Array
             //    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             //    0x00, 0x00, 0x00, 0x00 };
             byte[] testByte = new byte[] { 0xC9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x02, 0x70, 0x00, 0x00, 0x01, 0x00 };
-            var CS  = Program.ChkSum8(testByte);
+            byte[] testByte2 = new byte[] { 0x8b,0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x71, 0x00, 0x00, 0x01, 0x00 };
+            byte[] testByte3 = new byte[] { 0xC9, 0x33, 0x00, 0x00, 0x00, 0x00, 0x02, 0x75, 0x00, 0x00, 0x01, 0x00 };
+            byte[] testByte4 = new byte[] { 0xC9, 0x04, 0x00, 0x00, 0x00, 0x00, 0x02, 0x70, 0x00, 0x00, 0x01, 0x00 };
+            byte[] testByte5 = new byte[] { 0x88, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x01, 0x00 };
+            var CS  = Program.ChkSum8(testByte5);
             if (CS!=61)
             {
                 throw new InvalidDataException("值不相等");

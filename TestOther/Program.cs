@@ -50,8 +50,41 @@ namespace TestOther
             Console.WriteLine($"计算结果为：{x * y},param={param},str={str}");//江湖豪杰  载淳 载湉 溥仪 溥杰 
         }
     }
+    
+    public class GreetingManager
+    {
+        public event GreetingDelegate MakeGreeting;//delegate委托和event事件，对比两者的区别与联系
+        public void GreetingPeople(string name)
+        {
+            MakeGreeting(name);
+        }
+    }
+    public delegate void GreetingDelegate(string name);
+    public delegate int MyDelegate(int s);
+
     class Program 
     {
+        public static int Conculartor(int s,MyDelegate ConcularResult)
+        {
+            return ConcularResult(s);
+        }
+        public static int AddResult(int s)
+        {
+            return s + s;
+        }
+        public static void GreetingPeople(string name,GreetingDelegate MakeGreeting)
+        {
+            MakeGreeting(name);
+        }
+        
+        public static void ChineseGreeting(string name)
+        {
+            Console.WriteLine("你好,"+name);
+        }
+        public static void EnglishGreeting(string name)
+        {
+            Console.WriteLine("Hello," + name);
+        }
         private static byte by1;
         static int method1(int s)
         {
@@ -87,18 +120,29 @@ namespace TestOther
             method(t);
         }
 
-        public delegate int MyDelegate(int s);
 
         static void Main(string[] args)
         {
+            GreetingManager gm = new GreetingManager();
+            gm.MakeGreeting += EnglishGreeting;//注册委托
+            gm.MakeGreeting -= ChineseGreeting;//注销委托
+            //gm.MakeGreeting = ChineseGreeting;//编译会出错
+            gm.GreetingPeople("HanMeimei");
+
             TestReference reference = new TestReference();
             reference.GetMultiply(1,2,  //方法一，利用自定义参数调用 
                 param:new {Dog="H"},
                 str:"Hello");
             reference.GetMultiply(3, 2);//方法二，利用默认参数调用
+            //---利用delegate进行委托调用
+            GreetingPeople("田俊飞",ChineseGreeting);//方式1
+            GreetingDelegate gd;//方式2
+            gd = ChineseGreeting;
+            gd("Flying");
+            Conculartor(5,AddResult);
             //---利用delegate
-            MyDelegate my= new MyDelegate(method3);//把method3方法名传递给委托 
-            my(3);
+            MyDelegate my= new MyDelegate(method3);//方式3 把method3方法名传递给委托 
+            my(3);//把参数传给委托
             //my(3)和my1(3)的用法是一致的
             MyDelegate my1 = (int s) =>
             {

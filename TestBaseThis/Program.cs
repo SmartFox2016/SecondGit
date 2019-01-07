@@ -17,6 +17,10 @@ namespace TestBaseThis
         {
             Console.Write("调用父类一个参数的构造函数");
         }
+        public MyBaseClass(int i, int j)
+        {
+            Console.Write("  调用父类2个参数的构造函数 ");
+        }
     }
 
     public class MyDerivedClass : MyBaseClass
@@ -36,6 +40,7 @@ namespace TestBaseThis
         public MyDerivedClass()
             : this(5)//调用当前实例有参数的构造函数。如果只调用这个构造函数，那还需要调用一次基类没有参的构造函数！！！
         {
+
             age = 101;
             Console.Write(age);
         }
@@ -47,7 +52,7 @@ namespace TestBaseThis
             Console.Write(age);
         }
 
-        public MyDerivedClass(int i, int j)
+        public MyDerivedClass(int i, int j) //如果没有出现base，则会调用父类无参数构造器（如果有的话）
         {
             Console.Write("  两个变量的参数 ");
         }
@@ -60,7 +65,7 @@ namespace TestBaseThis
         public SimpleDbExecutable(Func<string> sql)
         {
             
-            this._sqlFact = sql;
+            this._sqlFact = sql;  //也就是说，比如，求出3年的首尾增长率R为30%，则3r+3r² 略小于30%。同时，r越小，误差也越小
             Console.WriteLine($"调用一个Func<string>构造器,sql={_sqlFact}");
         }
 
@@ -72,15 +77,21 @@ namespace TestBaseThis
         }
 
     }
+    
 
     class Program
     {
         static void Main(string[] args)
         {
-            SimpleDbExecutable sd = new SimpleDbExecutable("Hello");
+            //这个例子说明继承的重要性，以及代码运行流程
+            ProtocolHandler ph = new ProtocolHandler();
+            ph.OnNewOnlineUnsafe();
 
+
+
+            SimpleDbExecutable sd = new SimpleDbExecutable("Hello");
             Console.WriteLine("----MyDerivedClass()---");
-            MyDerivedClass myder = new MyDerivedClass(); //100调用父类一个参数的构造函数102 101
+            MyDerivedClass myder = new MyDerivedClass(); //100调用父类一个参数的构造函数102/101/   
             Console.WriteLine("----MyDerivedClass(5)---");
             MyDerivedClass myder2 = new MyDerivedClass(5);
             Console.WriteLine("----MyDerivedClass(5,6)---");
